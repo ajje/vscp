@@ -461,6 +461,14 @@ void *deviceThread::Entry()
                     nodeClient = m_pDeviceItem->m_pClientItem->m_clientInputQueue.GetFirst();
                     vscpEvent *pqueueEvent = nodeClient->GetData();
                     m_pDeviceItem->m_pClientItem->m_mutexClientInputQueue.Unlock();
+					
+					// Trow away event if Level II and Level I interface
+                    if ( ( CLIENT_ITEM_INTERFACE_TYPE_DRIVER_LEVEL1 == m_pDeviceItem->m_pClientItem->m_type ) && ( pqueueEvent->vscp_class > 512 ) ) {
+                        // Remove the event and the node
+                        delete pqueueEvent;
+                        m_pDeviceItem->m_pClientItem->m_clientInputQueue.DeleteNode(nodeClient);
+                        continue;
+					}
 
                     canalMsg canalMsg;
                     vscp_convertEventToCanal(&canalMsg, pqueueEvent);
@@ -1151,6 +1159,14 @@ void *deviceLevel2WriteThread::Entry()
             
             m_pMainThreadObj->m_pDeviceItem->m_pClientItem->m_mutexClientInputQueue.Unlock();
 
+			// Trow away event if Level II and Level I interface
+            if ( ( CLIENT_ITEM_INTERFACE_TYPE_DRIVER_LEVEL1 == m_pMainThreadObj->m_pDeviceItem->m_pClientItem->m_type ) && ( pqueueEvent->vscp_class > 512 ) ) {
+                // Remove the event and the node
+                delete pqueueEvent;
+                m_pMainThreadObj->m_pDeviceItem->m_pClientItem->m_clientInputQueue.DeleteNode(nodeClient);
+                continue;
+			}
+			
             if (CANAL_ERROR_SUCCESS ==
                 
                 m_pMainThreadObj->m_pDeviceItem->m_proc_VSCPBlockingSend( m_pMainThreadObj->m_pDeviceItem->m_openHandle, 

@@ -119,7 +119,7 @@
         <!-- Set to false to disable.                                       -->
         <!-- Path to variables storage.                                     -->
 
-        <variables enable="true" path="/srv/vscp/variables.xml" autosave="5" />
+        <variables enable="true" path="/srv/vscp/variables.xml" autosave="0" />
 
         <!-- Enable disable the webserver interface.                        -->
         <!-- Set the port to use for the webserver interface                -->
@@ -177,11 +177,11 @@
  
     <automation enable="true">
         <!-- zone/subzone server use    -->
-        <zone>1</zone>
-        <sub-zone>2</sub-zone>
+        <zone>32</zone>
+        <sub-zone>1</sub-zone>
         <!-- sunrise/sunset events data -->
-        <longitude>15.1604167</longitude>
-        <latitude>61.7441833</latitude>
+        <longitude>18.07822</longitude>
+        <latitude>59.53139</latitude>
         <sunrise enable="true" />
         <sunrise-twilight enable="true" />
         <sunset enable="true" />
@@ -191,7 +191,7 @@
         <daylightsavingtime-start>2014-03-30 02:00:00</daylightsavingtime-start>
         <daylightsavingtime-end>2014-10-26 02:00:00</daylightsavingtime-end>
         <!-- High level events -->
-        <segmentcontoller-event enable="true" interval="60" />
+        <segmentcontol-event enable="true" interval="60" />
         <heartbeat-event enable="true" interval="60" />
     </automation>
     
@@ -213,8 +213,17 @@
             <name>can232</name>
             <config>/dev/ttyS0;57600;0;0;125</config>
             <path>/usr/local/lib/vscpl1_can232drv.so</path>
-            <guid>00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00</guid>
             <flags>0</flags>
+            <guid>00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00</guid>
+        </driver>
+
+        <!-- The SocketCAN driver -->
+        <driver enable="true" >
+            <name>SocketCAN</name>
+            <config>can0</config>
+            <path>/usr/local/lib/vscpl1_socketcandrv.so</path>
+            <flags>0</flags>
+            <guid>00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00</guid>
         </driver>
 
         <!-- The xap driver -->
@@ -230,10 +239,10 @@
 
     <!-- List level II VSCP drivers here                                    -->
 
-    <level2driver enable="true">
+    <level2driver enable="false">
 
         <!-- Level II Logger  -->
-        <driver enable="true" >
+        <driver enable="false" >
             <name>VSCP Level II Logger Driver 1</name>	
             <path>/usr/local/lib/vscpl2_loggerdrv.so</path>
              <config>/tmp/vscp_level2.log</config> 		
@@ -280,7 +289,7 @@
         </driver>
 
        <!-- Level II simulation  -->
-        <driver enable="true">
+        <driver enable="false">
             <name>sim1</name>
             <config>1</config>
             <guid>FF:FF:FF:FF:FF:FF:FF:F7:03:00:00:00:00:00:00:00</guid>
